@@ -164,6 +164,9 @@ files:
         }
     }
   learner_created: false
+- name: src/platform/CodeController.java
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/130/stages/692/implement#comment
 status: Unchecked
 record: -1
