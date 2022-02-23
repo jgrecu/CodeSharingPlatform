@@ -167,6 +167,21 @@ files:
 - name: src/platform/CodeController.java
   visible: true
   learner_created: true
+- name: src/platform/Code.java
+  visible: true
+  learner_created: true
+- name: src/resources/templates/code.html
+  visible: true
+  learner_created: true
+- name: src/platform/CodeService.java
+  visible: true
+  learner_created: true
+- name: src/platform/ApiCodeController.java
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/11027#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Wed, 23 Feb 2022 16:33:33 UTC
 record: -1

@@ -1,33 +1,23 @@
 package platform;
 
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-@RestController
+@Controller
+@RequestMapping("/code")
 public class CodeController {
 
-    @GetMapping("/code")
-    public ResponseEntity<String> usingResponseEntityBuilderAndHttpHeaders() {
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("Baeldung-Example-Header",
-                "Value-ResponseEntityBuilderWithHttpHeaders");
+    CodeService codeService = new CodeService();
 
-        return ResponseEntity.ok()
-                .headers(responseHeaders)
-                .body("<html>\n" +
-                        "<head>\n" +
-                        "    <title>Code</title>\n" +
-                        "</head>\n" +
-                        "<body>\n" +
-                        "    <pre>\n" +
-                        "public static void main(String[] args) {\n" +
-                        "    SpringApplication.run(CodeSharingPlatform.class, args);\n" +
-                        "}</pre>\n" +
-                        "</body>\n" +
-                        "</html>");
+    @GetMapping
+    public String getHtmlCode(Model model) {
+
+        model.addAttribute("code", codeService.getCode());
+
+        return "code";
     }
 
 }
