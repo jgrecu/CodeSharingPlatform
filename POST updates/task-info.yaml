@@ -251,6 +251,119 @@ files:
         }
     }
   learner_created: false
+- name: src/platform/CodeController.java
+  visible: true
+  text: |
+    package platform;
+
+
+    import org.springframework.stereotype.Controller;
+    import org.springframework.ui.Model;
+    import org.springframework.web.bind.annotation.GetMapping;
+    import org.springframework.web.bind.annotation.RequestMapping;
+
+    @Controller
+    @RequestMapping("/code")
+    public class CodeController {
+
+        CodeService codeService = new CodeService();
+
+        @GetMapping
+        public String getHtmlCode(Model model) {
+
+            model.addAttribute("code", codeService.getCode());
+
+            return "code";
+        }
+
+    }
+  learner_created: true
+- name: src/platform/CodeService.java
+  visible: true
+  text: |
+    package platform;
+
+    public class CodeService {
+
+        public Code getCode() {
+            return new Code("public static void main(String[] args) {\n\tSpringApplication.run(CodeSharingPlatform.class, args);\n}");
+        }
+    }
+  learner_created: true
+- name: src/platform/Code.java
+  visible: true
+  text: |
+    package platform;
+
+    public class Code {
+        private String code;
+
+        public Code(String code) {
+            this.code = code;
+        }
+
+        public Code() {
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        @Override
+        public String toString() {
+            return "Code{" +
+                    "code='" + code + '\'' +
+                    '}';
+        }
+    }
+  learner_created: true
+- name: src/resources/templates/code.html
+  visible: true
+  text: |-
+    <!DOCTYPE html>
+    <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Code</title>
+    </head>
+    <body>
+    <pre th:text="${code.getCode()}">
+
+    </pre>
+    </body>
+    </html>
+  learner_created: true
+- name: src/platform/ApiCodeController.java
+  visible: true
+  text: |
+    package platform;
+
+    import org.springframework.http.HttpHeaders;
+    import org.springframework.http.ResponseEntity;
+    import org.springframework.web.bind.annotation.GetMapping;
+    import org.springframework.web.bind.annotation.RequestMapping;
+    import org.springframework.web.bind.annotation.RestController;
+
+    @RestController
+    @RequestMapping("/api/code")
+    public class ApiCodeController {
+
+        CodeService codeService = new CodeService();
+
+        @GetMapping
+        public ResponseEntity<Code> getApiCode() {
+
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("Content-Type", "application/json");
+            return ResponseEntity.ok().
+                    headers(responseHeaders)
+                    .body(codeService.getCode());
+        }
+    }
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/11028#comment
 status: Unchecked
 record: -1

@@ -2,10 +2,21 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <title>Code</title>
+    <style>
+        pre {
+            display: inline-flex;
+            border: 1px solid #E8E8E8;
+            padding: 2px;
+            margin: 0px;
+            background-color: #F0F0F0;
+        }
+    </style>
 </head>
 <body>
-<pre th:text="${code.getCode()}">
+<p style="color: green;" th:text="${code.getDate()}">
 
+</p>
+<pre th:text="${code.getCode()}">
 </pre>
 </body>
 </html>

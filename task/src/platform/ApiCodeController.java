@@ -2,15 +2,17 @@ package platform;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/code")
 public class ApiCodeController {
 
-    CodeService codeService = new CodeService();
+    CodeService codeService;
+
+    public ApiCodeController(CodeService codeService) {
+        this.codeService = codeService;
+    }
 
     @GetMapping
     public ResponseEntity<Code> getApiCode() {
@@ -20,5 +22,11 @@ public class ApiCodeController {
         return ResponseEntity.ok().
                 headers(responseHeaders)
                 .body(codeService.getCode());
+    }
+
+    @PostMapping("/new")
+    public String setApiCode(@RequestBody Code code) {
+        codeService.setCode(code);
+        return "{}";
     }
 }

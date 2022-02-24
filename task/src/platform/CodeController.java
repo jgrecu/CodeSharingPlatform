@@ -10,7 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/code")
 public class CodeController {
 
-    CodeService codeService = new CodeService();
+    CodeService codeService;
+
+    public CodeController(CodeService codeService) {
+        this.codeService = codeService;
+    }
 
     @GetMapping
     public String getHtmlCode(Model model) {

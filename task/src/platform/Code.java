@@ -1,13 +1,20 @@
 package platform;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Code {
     private String code;
+    private String date;
 
     public Code(String code) {
         this.code = code;
+        date = formatDateTime(LocalDateTime.now());
     }
 
     public Code() {
+        code = "public static void main(String[] args) {\n\tSpringApplication.run(CodeSharingPlatform.class, args);\n}";
+        date = formatDateTime(LocalDateTime.now());
     }
 
     public String getCode() {
@@ -16,6 +23,19 @@ public class Code {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime dateTime) {
+        this.date = formatDateTime(dateTime);
+    }
+
+    private String formatDateTime(LocalDateTime dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        return dateTime.format(formatter);
     }
 
     @Override
