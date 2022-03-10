@@ -24,4 +24,11 @@ public class CodeController {
         return "code";
     }
 
+    @GetMapping("/new")
+    public String getCodeForm(Model model) {
+
+        model.addAttribute("new-code", codeService.getCode());
+        return "new-code";
+    }
+
 }

@@ -7,17 +7,17 @@ import java.time.LocalDateTime;
 @Service
 public class CodeService {
 
-    private Code code;
+    private CodeSnippet code;
 
     public CodeService() {
-        this.code = new Code();
+        this.code = new CodeSnippet();
     }
 
-    public Code getCode() {
+    public CodeSnippet getCode() {
         return code;
     }
 
-    public void setCode(Code code) {
+    public void setCode(CodeSnippet code) {
         this.code.setCode(code.getCode());
         this.code.setDate(LocalDateTime.now());
     }

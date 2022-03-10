@@ -3,16 +3,16 @@ package platform;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Code {
+public class CodeSnippet {
     private String code;
     private String date;
 
-    public Code(String code) {
+    public CodeSnippet(String code) {
         this.code = code;
         date = formatDateTime(LocalDateTime.now());
     }
 
-    public Code() {
+    public CodeSnippet() {
         code = "public static void main(String[] args) {\n\tSpringApplication.run(CodeSharingPlatform.class, args);\n}";
         date = formatDateTime(LocalDateTime.now());
     }
