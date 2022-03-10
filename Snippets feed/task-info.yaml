@@ -420,6 +420,174 @@ files:
         }
     }
   learner_created: false
+- name: src/platform/CodeController.java
+  visible: true
+  text: |
+    package platform;
+
+
+    import org.springframework.stereotype.Controller;
+    import org.springframework.ui.Model;
+    import org.springframework.web.bind.annotation.GetMapping;
+    import org.springframework.web.bind.annotation.RequestMapping;
+
+    @Controller
+    @RequestMapping("/code")
+    public class CodeController {
+
+        CodeService codeService;
+
+        public CodeController(CodeService codeService) {
+            this.codeService = codeService;
+        }
+
+        @GetMapping
+        public String getHtmlCode(Model model) {
+
+            model.addAttribute("code", codeService.getCode());
+
+            return "code";
+        }
+
+        @GetMapping("/new")
+        public String getCodeForm(Model model) {
+
+            model.addAttribute("new-code", codeService.getCode());
+            return "new-code";
+        }
+
+    }
+  learner_created: true
+- name: src/platform/CodeService.java
+  visible: true
+  text: |
+    package platform;
+
+    import org.springframework.stereotype.Service;
+
+    import java.time.LocalDateTime;
+
+    @Service
+    public class CodeService {
+
+        private CodeSnippet code;
+
+        public CodeService() {
+            this.code = new CodeSnippet();
+        }
+
+        public CodeSnippet getCode() {
+            return code;
+        }
+
+        public void setCode(CodeSnippet code) {
+            this.code.setCode(code.getCode());
+            this.code.setDate(LocalDateTime.now());
+        }
+    }
+  learner_created: true
+- name: src/platform/CodeSnippet.java
+  visible: true
+  text: |
+    package platform;
+
+    import java.time.LocalDateTime;
+    import java.time.format.DateTimeFormatter;
+
+    public class CodeSnippet {
+        private String code;
+        private String date;
+
+        public CodeSnippet(String code) {
+            this.code = code;
+            date = formatDateTime(LocalDateTime.now());
+        }
+
+        public CodeSnippet() {
+            code = "public static void main(String[] args) {\n\tSpringApplication.run(CodeSharingPlatform.class, args);\n}";
+            date = formatDateTime(LocalDateTime.now());
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public void setDate(LocalDateTime dateTime) {
+            this.date = formatDateTime(dateTime);
+        }
+
+        private String formatDateTime(LocalDateTime dateTime) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            return dateTime.format(formatter);
+        }
+
+        @Override
+        public String toString() {
+            return "Code{" +
+                    "code='" + code + '\'' +
+                    '}';
+        }
+    }
+  learner_created: true
+- name: src/platform/ApiCodeController.java
+  visible: true
+  text: |
+    package platform;
+
+    import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+    import org.springframework.http.HttpHeaders;
+    import org.springframework.http.ResponseEntity;
+    import org.springframework.web.bind.annotation.*;
+
+    @RestController
+    @RequestMapping("/api/code")
+    public class ApiCodeController {
+
+        @JsonSerialize
+        public class EmptyJsonResponse { }
+
+        CodeService codeService;
+
+        public ApiCodeController(CodeService codeService) {
+            this.codeService = codeService;
+        }
+
+        @GetMapping
+        public ResponseEntity<CodeSnippet> getApiCode() {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("Content-Type", "application/json");
+            return ResponseEntity.ok().
+                    headers(responseHeaders)
+                    .body(codeService.getCode());
+        }
+
+        @PostMapping("/new")
+        public ResponseEntity<EmptyJsonResponse> setApiCode(@RequestBody CodeSnippet code) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("Content-Type", "application/json");
+
+            codeService.setCode(code);
+
+            return ResponseEntity.ok()
+                    .headers(responseHeaders)
+                    .body(new EmptyJsonResponse());
+        }
+    }
+  learner_created: true
+- name: src/resources/templates/code.ftlh
+  visible: true
+  learner_created: true
+- name: src/resources/templates/new-code.ftlh
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/11029#comment
 status: Unchecked
 record: -1
