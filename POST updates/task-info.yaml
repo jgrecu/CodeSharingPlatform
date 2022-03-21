@@ -292,18 +292,6 @@ files:
   learner_created: true
 - name: src/resources/templates/code.ftlh
   visible: true
-  text: |-
-    <!DOCTYPE html>
-    <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>Code</title>
-    </head>
-    <body>
-    <pre th:text="${code.getCode()}">
-
-    </pre>
-    </body>
-    </html>
   learner_created: true
 - name: src/platform/ApiCodeController.java
   visible: true

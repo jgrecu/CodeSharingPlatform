@@ -588,6 +588,12 @@ files:
 - name: src/resources/templates/new-code.ftlh
   visible: true
   learner_created: true
+- name: src/platform/Id.java
+  visible: true
+  learner_created: true
+- name: src/platform/CodeSnippetResponse.java
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/11029#comment
 status: Unchecked
 record: -1
