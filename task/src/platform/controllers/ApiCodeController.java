@@ -1,11 +1,9 @@
 package platform.controllers;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import platform.services.CodeService;
 import platform.domain.CodeSnippet;
 import platform.domain.CodeSnippetResponse;
+import platform.services.CodeService;
 
 import java.util.List;
 
