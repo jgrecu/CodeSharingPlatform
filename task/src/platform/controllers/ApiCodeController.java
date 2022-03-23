@@ -1,8 +1,8 @@
 package platform.controllers;
 
 import org.springframework.web.bind.annotation.*;
-import platform.domain.CodeSnippet;
-import platform.domain.CodeSnippetResponse;
+import platform.models.CodeSnippet;
+import platform.models.CodeSnippetResponse;
 import platform.services.CodeService;
 
 import java.util.List;

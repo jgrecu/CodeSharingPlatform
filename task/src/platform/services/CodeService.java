@@ -1,9 +1,9 @@
 package platform.services;
 
 import org.springframework.stereotype.Service;
-import platform.domain.CodeSnippet;
-import platform.domain.CodeSnippetResponse;
-import platform.util.Id;
+import platform.models.CodeSnippet;
+import platform.models.CodeSnippetResponse;
+import platform.utils.Id;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

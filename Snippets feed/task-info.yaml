@@ -537,7 +537,7 @@ files:
         }
     }
   learner_created: true
-- name: src/platform/domain/CodeSnippet.java
+- name: src/platform/models/CodeSnippet.java
   visible: true
   text: |
     package platform;
@@ -588,10 +588,10 @@ files:
         }
     }
   learner_created: true
-- name: src/platform/domain/CodeSnippetResponse.java
+- name: src/platform/models/CodeSnippetResponse.java
   visible: true
   learner_created: true
-- name: src/platform/util/Id.java
+- name: src/platform/utils/Id.java
   visible: true
   learner_created: true
 feedback_link: https://hyperskill.org/learn/step/11029#comment

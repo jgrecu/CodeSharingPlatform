@@ -1,4 +1,4 @@
-package platform.util;
+package platform.utils;
 
 public class Id {
     private static volatile Integer id = 0;

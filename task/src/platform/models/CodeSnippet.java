@@ -1,7 +1,7 @@
-package platform.domain;
+package platform.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import platform.util.Id;
+import platform.utils.Id;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
