@@ -1,10 +1,12 @@
-package platform;
+package platform.controllers;
 
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import platform.services.CodeService;
 
 @Controller
 @RequestMapping("/code")
@@ -16,18 +18,16 @@ public class CodeController {
         this.codeService = codeService;
     }
 
-    @GetMapping
-    public String getHtmlCode(Model model) {
+    @GetMapping("/{id}")
+    public String getHtmlCode(@PathVariable int id, Model model) {
 
-        model.addAttribute("code", codeService.getCode());
+        model.addAttribute("code", codeService.getCode(id));
 
         return "code";
     }
 
     @GetMapping("/new")
     public String getCodeForm(Model model) {
-
-        model.addAttribute("new-code", codeService.getCode());
         return "new-code";
     }
 
