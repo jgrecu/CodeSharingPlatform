@@ -17,10 +17,10 @@ public class ApiCodeController {
         this.codeService = codeService;
     }
 
-    @GetMapping
+    /*@GetMapping
     public List<CodeSnippet> getApiCodeSnippets() {
         return codeService.getCodeSnippets();
-    }
+    }*/
 
     @GetMapping("/{id}")
     public CodeSnippet getApiCode(@PathVariable int id) {

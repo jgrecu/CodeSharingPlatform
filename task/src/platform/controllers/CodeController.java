@@ -27,8 +27,15 @@ public class CodeController {
     }
 
     @GetMapping("/new")
-    public String getCodeForm(Model model) {
+    public String getCodeForm() {
         return "new-code";
+    }
+
+    @GetMapping("/latest")
+    public String getLatestCodes(Model model) {
+        model.addAttribute("codes", codeService.getLatestCodeSnippets());
+
+        return "codes";
     }
 
 }

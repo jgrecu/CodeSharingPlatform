@@ -3,17 +3,17 @@ package platform.models;
 import java.util.Objects;
 
 public class CodeSnippetResponse {
-    private int id;
+    private String id;
 
-    public CodeSnippetResponse(int id) {
+    public CodeSnippetResponse(String id) {
         this.id = id;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
