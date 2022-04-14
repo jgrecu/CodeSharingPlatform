@@ -2,7 +2,8 @@ package platform.controllers;
 
 import org.springframework.web.bind.annotation.*;
 import platform.models.CodeSnippet;
-import platform.models.CodeSnippetResponse;
+import platform.models.CodeIdResponse;
+import platform.models.SnippetResponse;
 import platform.services.CodeService;
 
 import java.util.List;
@@ -11,32 +12,27 @@ import java.util.List;
 @RequestMapping("/api/code")
 public class ApiCodeController {
 
-    CodeService codeService;
+    private final CodeService codeService;
 
     public ApiCodeController(CodeService codeService) {
         this.codeService = codeService;
     }
 
-    /*@GetMapping
-    public List<CodeSnippet> getApiCodeSnippets() {
-        return codeService.getCodeSnippets();
-    }*/
-
     @GetMapping("/{id}")
-    public CodeSnippet getApiCode(@PathVariable int id) {
+    public SnippetResponse getApiCode(@PathVariable Long id) {
         return codeService.getCode(id);
     }
 
     @PostMapping("/new")
-    public CodeSnippetResponse setApiCode(@RequestBody CodeSnippet code) {
+    public CodeIdResponse setApiCode(@RequestBody CodeSnippet code) {
 
-        CodeSnippetResponse codeSnippetResponse = codeService.addCode(code);
+        CodeIdResponse codeIdResponse = codeService.addCode(code);
 
-        return codeSnippetResponse;
+        return codeIdResponse;
     }
 
     @GetMapping("/latest")
-    public List<CodeSnippet> getApiLatestCodeSnippets() {
+    public List<SnippetResponse> getApiLatestCodeSnippets() {
 
         return codeService.getLatestCodeSnippets();
     }

@@ -1,26 +1,29 @@
 package platform.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import platform.utils.Id;
-
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Entity
+@Table(name = "snippets")
 public class CodeSnippet {
-    @JsonIgnore
-    private Integer id;
-    private String code;
-    private String date;
 
-    public CodeSnippet(String code) {
-        this.id = Id.getNextId();
-        this.code = code;
-        date = formatDateTime(LocalDateTime.now());
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    private String code;
+    private LocalDateTime date;
 
     public CodeSnippet() {
-        code = "public static void main(String[] args) {\n\tSpringApplication.run(CodeSharingPlatform.class, args);\n}";
-        date = formatDateTime(LocalDateTime.now());
+    }
+
+    public CodeSnippet(String code) {
+        this.code = code;
+        this.date = LocalDateTime.now();
     }
 
     public String getCode() {
@@ -32,11 +35,11 @@ public class CodeSnippet {
     }
 
     public String getDate() {
-        return date;
+        return formatDateTime(date);
     }
 
     public void setDate(LocalDateTime dateTime) {
-        this.date = formatDateTime(dateTime);
+        this.date = dateTime;
     }
 
     private String formatDateTime(LocalDateTime dateTime) {
@@ -44,18 +47,20 @@ public class CodeSnippet {
         return dateTime.format(formatter);
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     @Override
     public String toString() {
-        return "Code{" +
-                "code='" + code + '\'' +
+        return "CodeSnippet{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", date=" + date +
                 '}';
     }
 }

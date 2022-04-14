@@ -2,47 +2,43 @@ package platform.services;
 
 import org.springframework.stereotype.Service;
 import platform.models.CodeSnippet;
-import platform.models.CodeSnippetResponse;
-import platform.utils.Id;
+import platform.models.CodeIdResponse;
+import platform.models.SnippetResponse;
+import platform.repository.CodeRepository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class CodeService {
 
-    private List<CodeSnippet> codeSnippets;
+    private final CodeRepository codeRepository;
 
-    public CodeService() {
-        this.codeSnippets = new ArrayList<>();
-        /*codeSnippets.add(new CodeSnippet("public static void main(String[] args) " +
-                "{\n\tSpringApplication.run(CodeSharingPlatform.class, args);\n}"));*/
+    public CodeService(CodeRepository codeRepository) {
+        this.codeRepository = codeRepository;
     }
 
     public List<CodeSnippet> getCodeSnippets() {
-        return codeSnippets;
+        return codeRepository.findAll();
     }
 
-    public CodeSnippet getCode(int id) {
-        return codeSnippets.stream()
-                .filter(codeSnippet -> codeSnippet.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("No code with id: " + id));
+    public SnippetResponse getCode(Long id) {
+        Optional<CodeSnippet> optionalCodeSnippet = codeRepository.findById(id);
+        return optionalCodeSnippet.map(SnippetResponse::new).orElseThrow(() -> new IllegalStateException("No code with id: " + id));
     }
 
-    public CodeSnippetResponse addCode(CodeSnippet code) {
+    public CodeIdResponse addCode(CodeSnippet code) {
         code.setDate(LocalDateTime.now());
-        code.setId(Id.getNextId());
-        codeSnippets.add(code);
+        codeRepository.saveAndFlush(code);
 
-        return new CodeSnippetResponse(code.getId().toString());
+        return new CodeIdResponse(code.getId().toString());
     }
 
-    public List<CodeSnippet> getLatestCodeSnippets() {
+    public List<SnippetResponse> getLatestCodeSnippets() {
+        List<CodeSnippet> codeSnippets = codeRepository.findAll();
         return codeSnippets.stream()
                 .collect(Collectors.collectingAndThen(Collectors.toList(), l -> {
                     Collections.reverse(l);
@@ -50,10 +46,7 @@ public class CodeService {
                 ))
                 .stream()
                 .limit(10)
+                .map(SnippetResponse::new)
                 .collect(Collectors.toList());
-        /*return codeSnippets.stream()
-                .sorted(Comparator.comparing(CodeSnippet::getDate).reversed())
-                .limit(10)
-                .collect(Collectors.toList());*/
     }
 }

@@ -19,7 +19,7 @@ public class CodeController {
     }
 
     @GetMapping("/{id}")
-    public String getHtmlCode(@PathVariable int id, Model model) {
+    public String getHtmlCode(@PathVariable Long id, Model model) {
 
         model.addAttribute("code", codeService.getCode(id));
 

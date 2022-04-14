@@ -2,10 +2,10 @@ package platform.models;
 
 import java.util.Objects;
 
-public class CodeSnippetResponse {
+public class CodeIdResponse {
     private String id;
 
-    public CodeSnippetResponse(String id) {
+    public CodeIdResponse(String id) {
         this.id = id;
     }
 
@@ -20,8 +20,8 @@ public class CodeSnippetResponse {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CodeSnippetResponse)) return false;
-        CodeSnippetResponse that = (CodeSnippetResponse) o;
+        if (!(o instanceof CodeIdResponse)) return false;
+        CodeIdResponse that = (CodeIdResponse) o;
         return id == that.id;
     }
 

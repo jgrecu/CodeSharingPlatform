@@ -754,7 +754,26 @@ files:
     </body>
     </html>
   learner_created: true
-- name: src/platform/models/CodeSnippetResponse.java
+- name: src/resources/templates/codes.ftlh
+  visible: true
+  text: |-
+    <html lang="en">
+    <head>
+        <title>Latest</title>
+    </head>
+    <body>
+        <#list codes as code>
+            <span id="load_date">${code.getDate()}</span>
+            <pre id="code_snippet">${code.getCode()}</pre>
+            <br>
+        </#list>
+    </body>
+    </html>
+  learner_created: true
+- name: src/platform/repository/CodeRepository.java
+  visible: true
+  learner_created: true
+- name: src/platform/models/CodeIdResponse.java
   visible: true
   text: |
     package platform.models;
@@ -797,22 +816,12 @@ files:
         }
     }
   learner_created: true
-- name: src/resources/templates/codes.ftlh
+- name: src/platform/models/SnippetResponse.java
   visible: true
-  text: |-
-    <html lang="en">
-    <head>
-        <title>Latest</title>
-    </head>
-    <body>
-        <#list codes as code>
-            <span id="load_date">${code.getDate()}</span>
-            <pre id="code_snippet">${code.getCode()}</pre>
-            <br>
-        </#list>
-    </body>
-    </html>
   learner_created: true
 feedback_link: https://hyperskill.org/learn/step/11030#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Thu, 14 Apr 2022 13:05:30 UTC
 record: -1
