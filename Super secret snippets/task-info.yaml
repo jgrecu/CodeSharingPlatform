@@ -641,6 +641,372 @@ files:
         }
     }
   learner_created: false
+- name: src/platform/models/CodeSnippet.java
+  visible: true
+  text: |
+    package platform.models;
+
+    import javax.persistence.Entity;
+    import javax.persistence.GeneratedValue;
+    import javax.persistence.GenerationType;
+    import javax.persistence.Id;
+    import javax.persistence.Table;
+    import java.time.LocalDateTime;
+    import java.time.format.DateTimeFormatter;
+
+    @Entity
+    @Table(name = "snippets")
+    public class CodeSnippet {
+
+        @Id
+        @GeneratedValue(strategy = GenerationType.AUTO)
+        private Long id;
+        private String code;
+        private LocalDateTime date;
+
+        public CodeSnippet() {
+        }
+
+        public CodeSnippet(String code) {
+            this.code = code;
+            this.date = LocalDateTime.now();
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public String getDate() {
+            return formatDateTime(date);
+        }
+
+        public void setDate(LocalDateTime dateTime) {
+            this.date = dateTime;
+        }
+
+        private String formatDateTime(LocalDateTime dateTime) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            return dateTime.format(formatter);
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        @Override
+        public String toString() {
+            return "CodeSnippet{" +
+                    "id=" + id +
+                    ", code='" + code + '\'' +
+                    ", date=" + date +
+                    '}';
+        }
+    }
+  learner_created: true
+- name: src/platform/controllers/ApiCodeController.java
+  visible: true
+  text: |
+    package platform.controllers;
+
+    import org.springframework.web.bind.annotation.*;
+    import platform.models.CodeSnippet;
+    import platform.models.CodeIdResponse;
+    import platform.models.SnippetResponse;
+    import platform.services.CodeService;
+
+    import java.util.List;
+
+    @RestController
+    @RequestMapping("/api/code")
+    public class ApiCodeController {
+
+        private final CodeService codeService;
+
+        public ApiCodeController(CodeService codeService) {
+            this.codeService = codeService;
+        }
+
+        @GetMapping("/{id}")
+        public SnippetResponse getApiCode(@PathVariable Long id) {
+            return codeService.getCode(id);
+        }
+
+        @PostMapping("/new")
+        public CodeIdResponse setApiCode(@RequestBody CodeSnippet code) {
+
+            CodeIdResponse codeIdResponse = codeService.addCode(code);
+
+            return codeIdResponse;
+        }
+
+        @GetMapping("/latest")
+        public List<SnippetResponse> getApiLatestCodeSnippets() {
+
+            return codeService.getLatestCodeSnippets();
+        }
+    }
+  learner_created: true
+- name: src/platform/models/CodeIdResponse.java
+  visible: true
+  text: |
+    package platform.models;
+
+    import java.util.Objects;
+
+    public class CodeIdResponse {
+        private String id;
+
+        public CodeIdResponse(String id) {
+            this.id = id;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof CodeIdResponse)) return false;
+            CodeIdResponse that = (CodeIdResponse) o;
+            return id == that.id;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(id);
+        }
+
+        @Override
+        public String toString() {
+            return "CodeSnippetResponse{" +
+                    "id=" + id +
+                    '}';
+        }
+    }
+  learner_created: true
+- name: src/platform/services/CodeService.java
+  visible: true
+  text: |
+    package platform.services;
+
+    import org.springframework.stereotype.Service;
+    import platform.models.CodeSnippet;
+    import platform.models.CodeIdResponse;
+    import platform.models.SnippetResponse;
+    import platform.repository.CodeRepository;
+
+    import java.time.LocalDateTime;
+    import java.util.Collections;
+    import java.util.List;
+    import java.util.Optional;
+    import java.util.stream.Collectors;
+
+    @Service
+    public class CodeService {
+
+        private final CodeRepository codeRepository;
+
+        public CodeService(CodeRepository codeRepository) {
+            this.codeRepository = codeRepository;
+        }
+
+        public List<CodeSnippet> getCodeSnippets() {
+            return codeRepository.findAll();
+        }
+
+        public SnippetResponse getCode(Long id) {
+            Optional<CodeSnippet> optionalCodeSnippet = codeRepository.findById(id);
+            return optionalCodeSnippet.map(SnippetResponse::new).orElseThrow(() -> new IllegalStateException("No code with id: " + id));
+        }
+
+        public CodeIdResponse addCode(CodeSnippet code) {
+            code.setDate(LocalDateTime.now());
+            codeRepository.saveAndFlush(code);
+
+            return new CodeIdResponse(code.getId().toString());
+        }
+
+        public List<SnippetResponse> getLatestCodeSnippets() {
+            List<CodeSnippet> codeSnippets = codeRepository.findAll();
+            return codeSnippets.stream()
+                    .collect(Collectors.collectingAndThen(Collectors.toList(), l -> {
+                        Collections.reverse(l);
+                        return l;}
+                    ))
+                    .stream()
+                    .limit(10)
+                    .map(SnippetResponse::new)
+                    .collect(Collectors.toList());
+        }
+    }
+  learner_created: true
+- name: src/resources/templates/new-code.ftlh
+  visible: true
+  text: |-
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Create</title>
+        <script>
+            function send() {
+                let object = {
+                    "code": document.getElementById("code_snippet").value
+                };
+
+                let json = JSON.stringify(object);
+
+                let xhr = new XMLHttpRequest();
+                xhr.open("POST", '/api/code/new', false)
+                xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+                xhr.send(json);
+
+                if (xhr.status == 200) {
+                    alert("Success!");
+                }
+            }
+        </script>
+    </head>
+    <body>
+    <textarea id="code_snippet">// write your code here </textarea>
+    <button id="send_snippet" type="submit" onclick="send()">Submit</button>
+    </body>
+    </html>
+  learner_created: true
+- name: src/resources/templates/codes.ftlh
+  visible: true
+  text: |-
+    <html lang="en">
+    <head>
+        <link rel="stylesheet"
+           target="_blank" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/styles/default.min.css">
+        <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <title>Latest</title>
+    </head>
+    <body>
+        <#list codes as code>
+            <span id="load_date">${code.getDate()}</span>
+            <pre id="code_snippet"><code>${code.getCode()}</code></pre>
+            <br>
+        </#list>
+    </body>
+    </html>
+  learner_created: true
+- name: src/platform/controllers/CodeController.java
+  visible: true
+  text: |
+    package platform.controllers;
+
+
+    import org.springframework.stereotype.Controller;
+    import org.springframework.ui.Model;
+    import org.springframework.web.bind.annotation.GetMapping;
+    import org.springframework.web.bind.annotation.PathVariable;
+    import org.springframework.web.bind.annotation.RequestMapping;
+    import platform.services.CodeService;
+
+    @Controller
+    @RequestMapping("/code")
+    public class CodeController {
+
+        CodeService codeService;
+
+        public CodeController(CodeService codeService) {
+            this.codeService = codeService;
+        }
+
+        @GetMapping("/{id}")
+        public String getHtmlCode(@PathVariable Long id, Model model) {
+
+            model.addAttribute("code", codeService.getCode(id));
+
+            return "code";
+        }
+
+        @GetMapping("/new")
+        public String getCodeForm() {
+            return "new-code";
+        }
+
+        @GetMapping("/latest")
+        public String getLatestCodes(Model model) {
+            model.addAttribute("codes", codeService.getLatestCodeSnippets());
+
+            return "codes";
+        }
+
+    }
+  learner_created: true
+- name: src/resources/templates/code.ftlh
+  visible: true
+  text: |-
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <link rel="stylesheet"
+           target="_blank" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/styles/default.min.css">
+        <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <title>Code</title>
+    </head>
+    <body>
+    <span id="load_date">${code.getDate()}</span>
+    <pre id="code_snippet"><code>${code.getCode()}</code></pre>
+    </body>
+    </html>
+  learner_created: true
+- name: src/platform/repository/CodeRepository.java
+  visible: true
+  text: |
+    package platform.repository;
+
+    import org.springframework.data.jpa.repository.JpaRepository;
+    import platform.models.CodeSnippet;
+
+    public interface CodeRepository extends JpaRepository<CodeSnippet, Long> {
+    }
+  learner_created: true
+- name: src/platform/models/SnippetResponse.java
+  visible: true
+  text: |
+    package platform.models;
+
+    public class SnippetResponse {
+        private final String code;
+        private final String date;
+
+        public SnippetResponse(CodeSnippet codeSnippet) {
+            this.code = codeSnippet.getCode();
+            this.date = codeSnippet.getDate();
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getDate() {
+            return date;
+        }
+    }
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/11031#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Well done! You've finished the project. Select a new project on <a href="https://hyperskill.org/projects">JetBrains
+    Academy</a> to continue learning.
+  time: Fri, 15 Apr 2022 08:26:49 UTC
 record: -1

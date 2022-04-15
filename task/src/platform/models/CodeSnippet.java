@@ -1,12 +1,9 @@
 package platform.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 @Entity
 @Table(name = "snippets")
@@ -14,9 +11,13 @@ public class CodeSnippet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private UUID id;
     private String code;
     private LocalDateTime date;
+    private Long time = 0L;
+    private Long views = 0L;
+    private Boolean timeRestricted = false;
+    private Boolean viewRestricted = false;
 
     public CodeSnippet() {
     }
@@ -47,12 +48,48 @@ public class CodeSnippet {
         return dateTime.format(formatter);
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
+    }
+
+    public Long getTime() {
+        return time;
+    }
+
+    public void setTime(Long time) {
+        this.time = time;
+    }
+
+    public Long getViews() {
+        return views;
+    }
+
+    public void setViews(Long views) {
+        this.views = views;
+    }
+
+    public Boolean getTimeRestricted() {
+        return timeRestricted;
+    }
+
+    public void setTimeRestricted(Boolean timeRestricted) {
+        this.timeRestricted = timeRestricted;
+    }
+
+    public Boolean getViewRestricted() {
+        return viewRestricted;
+    }
+
+    public void setViewRestricted(Boolean viewRestricted) {
+        this.viewRestricted = viewRestricted;
+    }
+
+    public LocalDateTime getFullDate() {
+        return date;
     }
 
     @Override
@@ -61,6 +98,10 @@ public class CodeSnippet {
                 "id=" + id +
                 ", code='" + code + '\'' +
                 ", date=" + date +
+                ", time=" + time +
+                ", views=" + views +
+                ", timeRestricted=" + timeRestricted +
+                ", viewRestricted=" + viewRestricted +
                 '}';
     }
 }
